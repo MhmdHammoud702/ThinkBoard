@@ -35,7 +35,7 @@ const HomePage = () => {
     fetchNotes();
   },[]);
   return (
-    <div className='min-h-screen'>
+    <div className='min-h-screen bg-black'>
       <Navbar/>
       {isRateLimited && <RateLimitUi/>}
       <div className='max-w-7xl mx-auto p-4 mt-6 bg-black'> 
