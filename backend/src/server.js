@@ -12,21 +12,18 @@ dotenv.config();
 
 
 const app = express();
-const port = process.env.port || 5001;
+const port = process.env.PORT || 5001;
 const ___dirname = path.resolve();
 
 if(process.env.NODE_ENV !== "production"){
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin:["http://localhost:5173", "http://localhost:3000"],
+    credentials: true
 }));
 }
 
 app.use(express.json());
-
-// app.use((req,res,next)=>{
-//     console.log(`Req method is ${req.method} and url is ${req.url}`);
-//     next();
-// });
+app.use(express.urlencoded({ extended: true }));
 
 app.use(rateLimiter);
 app.use("/api/notes",notesRoutes);
@@ -35,12 +32,12 @@ app.use("/api/notes",notesRoutes);
 if(process.env.NODE_ENV === "production"){
 app.use(express.static(path.join(___dirname,"../frontend/dist")))
 app.get("*",(req,res)=>{
-    res.sendFile(path.join(___dirname,"../frontend","dist","index,html"))
+    res.sendFile(path.join(___dirname,"../frontend","dist","index.html"))
 })}
 
 connectDb().then(()=>{
     app.listen(port,()=>{
-    console.log("server started on port: 5001");
+    console.log(`Server started on port: ${port}`);
 })
 });
 
